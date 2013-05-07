@@ -117,23 +117,6 @@ class RelOperatorTest extends TestDriver {
 
 			} // for
 			saveCounts("insert");
-
-			// ==============================
-			
-		BucketScan buck=	index.openScan();
-		
-		HashScan scanm = index.openScan(buck.getLastKey());
-		
-		
-		while(buck.hasNext()){
-			SearchKey key = buck.getLastKey();
-			Tuple t = new Tuple(s_drivers, file.selectRecord(buck.getNext()));
-			System.out.println(t.getField(0) + " { } " + t.getField(1) + " { } " + t.getField(2));
-		}
-			
-			// ==============================
-			
-			System.exit(0);
 			
 			
 			// test index scan

@@ -1,0 +1,97 @@
+package iterators.relop;
+
+import iterators.Iterator;
+import primitives.Predicate;
+import primitives.Tuple;
+
+/**
+ * The simplest of all join algorithms: nested loops (see textbook, 3rd edition,
+ * section 14.4.1, page 454).
+ */
+public class SimpleJoin extends Iterator {
+
+	private Iterator left, right;
+	private Tuple left_tuple, right_tuple;
+
+	private Predicate[] preds;
+
+	/**
+	 * Constructs a join, given the left and right iterators and join predicates
+	 * (relative to the combined schema).
+	 */
+	public SimpleJoin(Iterator left, Iterator right, Predicate... preds) {
+		this.left = left;
+		this.right = right;
+		this.preds = preds;
+	}
+
+	/**
+	 * Gives a one-line explaination of the iterator, repeats the call on any
+	 * child iterators, and increases the indent depth along the way.
+	 */
+	public void explain(int depth) {
+		System.out.println("SimpleJoin Iterator");
+		System.out.print("\t\t");
+		left.explain(depth + 1);
+		System.out.print("\t\t");
+		right.explain(depth + 1);
+	}
+
+	/**
+	 * Restarts the iterator, i.e. as if it were just constructed.
+	 */
+	public void restart() {
+		left.restart();
+		right.restart();
+	}
+
+	/**
+	 * Returns true if the iterator is open; false otherwise.
+	 */
+	public boolean isOpen() {
+		return left.isOpen() && right.isOpen();
+	}
+
+	/**
+	 * Closes the iterator, releasing any resources (i.e. pinned pages).
+	 */
+	public void close() {
+		left.close();
+		right.close();
+	}
+
+	/**
+	 * Returns true if there are more tuples, false otherwise.
+	 */
+	public boolean hasNext() {
+		return left.hasNext();
+	}
+
+	/**
+	 * Gets the next tuple in the iteration.
+	 * 
+	 * @throws IllegalStateException
+	 *             if no more tuples
+	 */
+	public Tuple getNext() {
+		boolean match = false;
+		Tuple joined_tuple;
+		while (!match) {
+		
+			if (!right.hasNext()) {
+				right.restart();
+				if(!left.hasNext())
+					return false;
+				left_tuple = left.getNext();
+			}
+			right_tuple = right.getNext();
+			joined_tuple = Tuple.join(left_tuple, right_tuple, getSchema());
+			for(Predicate pred : preds){
+				if(pred.evaluate(tuple))
+					match = true;
+			}
+		}
+		return joined_tuple;
+	}
+
+} // public class SimpleJoin extends Iterator
