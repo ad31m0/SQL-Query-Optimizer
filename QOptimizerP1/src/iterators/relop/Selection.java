@@ -3,65 +3,144 @@ package iterators.relop;
 import iterators.Iterator;
 import primitives.Predicate;
 import primitives.Tuple;
-import externalSort.HashJoin;
 
 /**
  * The selection operator specifies which tuples to retain under a condition; in
- * Minibase, this condition is simply a set of independent predicates logically
+ * Mini-base, this condition is simply a set of independent predicates logically
  * connected by AND operators.
  */
-public class Selection extends Iterator {
+public class Selection extends Iterator
+{
 
-  /**
-   * Constructs a selection, given the underlying iterator and predicates.
-   */
-  public Selection(Iterator iter, Predicate... preds) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
+	private Iterator iterator;
+	private Predicate[] predicates;
+	Tuple current_tuple;
+	boolean is_consumed;
+	boolean has_next;
+	boolean is_open;
 
-/**
-   * Gives a one-line explaination of the iterator, repeats the call on any
-   * child iterators, and increases the indent depth along the way.
-   */
-  public void explain(int depth) {
-    throw new UnsupportedOperationException("Not implemented");
-  }
+	/**
+	 * Constructs a selection, given the underlying iterator and predicates.
+	 * 
+	 * @throws Exception
+	 */
+	public Selection(Iterator iter, Predicate... preds) throws Exception
+	{
 
-  /**
-   * Restarts the iterator, i.e. as if it were just constructed.
-   */
-  public void restart() {
-    throw new UnsupportedOperationException("Not implemented");
-  }
+		// validate predicates
+		int predicates_num = preds.length;
+		for (int i = 0; i < predicates_num; i++)
+		{
+			if (!preds[i].validate(iter.getSchema()))
+			{
+				throw new Exception(
+						"Invalid Predicate Exception @ Predicate : "
+								+ preds[i].toString());
+			}
+		}
 
-  /**
-   * Returns true if the iterator is open; false otherwise.
-   */
-  public boolean isOpen() {
-    throw new UnsupportedOperationException("Not implemented");
-  }
+		// initialize the selection schema and iterator
+		this.iterator = iter;
+		this.predicates = preds;
+		setSchema(iter.getSchema());
 
-  /**
-   * Closes the iterator, releasing any resources (i.e. pinned pages).
-   */
-  public void close() {
-    throw new UnsupportedOperationException("Not implemented");
-  }
+		is_consumed = true;
+		has_next = false;
+		is_open = true;
+	}
 
-  /**
-   * Returns true if there are more tuples, false otherwise.
-   */
-  public boolean hasNext() {
-    throw new UnsupportedOperationException("Not implemented");
-  }
+	/**
+	 * Gives a one-line explanation of the iterator, repeats the call on any
+	 * child iterators, and increases the indent depth along the way.
+	 */
+	public void explain(int depth)
+	{
+		for (int i = 0; i < depth; i++)
+		{
+			System.out.print("\t\t");
+		}
+		System.out.print("Selection Iterator:\n");
+		iterator.explain(depth + 1);
+	}
 
-  /**
-   * Gets the next tuple in the iteration.
-   * 
-   * @throws IllegalStateException if no more tuples
-   */
-  public Tuple getNext() {
-    throw new UnsupportedOperationException("Not implemented");
-  }
+	/**
+	 * Restarts the iterator, i.e. as if it were just constructed.
+	 */
+	public void restart()
+	{
+		iterator.restart();
+		is_consumed = true;
+		has_next = false;
+	}
+
+	/**
+	 * Returns true if the iterator is open; false otherwise.
+	 */
+	public boolean isOpen()
+	{
+		return is_open;
+	}
+
+	/**
+	 * Closes the iterator, releasing any resources (i.e. pinned pages).
+	 */
+	public void close()
+	{
+		iterator.close();
+		is_open=false;
+	}
+
+	/**
+	 * Returns true if there are more tuples, false otherwise.
+	 */
+	public boolean hasNext()
+	{
+		if (is_consumed)
+		{
+			boolean matches = true;
+			has_next = false ;
+			while (iterator.hasNext())
+			{
+				current_tuple = iterator.getNext();
+
+				matches = true;
+				for (int i = 0; i < predicates.length; i++)
+				{
+					if (!predicates[i].evaluate(current_tuple))
+					{
+						matches = false;
+						break;
+					}
+				}
+
+				if (matches)
+				{
+					has_next = true;
+					break;
+				}
+			}
+			is_consumed = false;
+		}
+		return has_next;
+	}
+
+	/**
+	 * Gets the next tuple in the iteration.
+	 * 
+	 * @throws IllegalStateException
+	 *             if no more tuples
+	 */
+	public Tuple getNext()
+	{
+		if(hasNext())
+		{
+			is_consumed = true;
+			return current_tuple;
+		}
+		else
+		{
+			throw new IllegalStateException("Iterator has no more tuples");
+		}
+	}
 
 } // public class Selection extends Iterator
