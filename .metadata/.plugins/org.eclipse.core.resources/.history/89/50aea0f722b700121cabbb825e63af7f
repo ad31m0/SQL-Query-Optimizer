@@ -27,7 +27,6 @@ public class KeyScan extends Iterator {
 		this.key = key;
 		this.file = file;
 		this.index = index;
-		this.scan = index.openScan(key);
 	}
 
 	/**
