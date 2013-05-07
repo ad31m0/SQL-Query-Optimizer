@@ -29,6 +29,7 @@ public class IndexScan extends Iterator {
 		this.index = index;
 		this.file = file;
 		this.scan = index.openScan();
+		
 	}
 
 	/**

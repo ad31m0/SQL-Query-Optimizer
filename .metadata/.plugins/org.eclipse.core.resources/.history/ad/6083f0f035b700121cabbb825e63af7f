@@ -1,0 +1,64 @@
+package iterators.relop;
+
+import global.SearchKey;
+import index.HashIndex;
+import iterators.Iterator;
+import iterators.scanners.FileScan;
+import primitives.Tuple;
+
+public class HashJoin extends Iterator {
+
+	private Iterator left, right;
+	private HashIndex index;
+	public HashJoin(Iterator left, Iterator right, int i, int j) {
+		this.left = left;
+		this.right = right;
+		initHashIndex();
+	}
+
+	private void initHashIndex(int colno){
+		index = new HashIndex(null);
+		Tuple tuple;
+		while(right.hasNext()){
+			tuple = right.getNext();
+			SearchKey key = new SearchKey(tuple.getField(colno));
+			index.insertEntry(key, );
+		}
+	}
+	@Override
+	public void explain(int depth) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void restart() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean isOpen() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean hasNext() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Tuple getNext() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
