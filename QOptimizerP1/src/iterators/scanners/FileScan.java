@@ -73,6 +73,7 @@ public class FileScan extends Iterator {
 	 *             if no more tuples
 	 */
 	public Tuple getNext() {
+		rid = new RID();
 		byte[] data = scan.getNext(rid);
 		tuple = new Tuple(getSchema(), data);
 		return tuple;
