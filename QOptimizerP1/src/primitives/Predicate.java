@@ -60,6 +60,16 @@ public class Predicate {
       }
       type1 = schema.fieldType(fldno);
     }
+    else if ( type1 == AttrType.FIELDNO)
+    {
+        int fldno = (Integer) left;
+        if (fldno < 0) {
+          return false;
+        }
+        type1 = schema.fieldType(fldno);
+    }
+    
+    
     int type2 = rtype;
     if (type2 == AttrType.COLNAME) {
       int fldno = schema.fieldNumber((String) right);
@@ -68,7 +78,14 @@ public class Predicate {
       }
       type2 = schema.fieldType(fldno);
     }
-
+    else if ( type2 == AttrType.FIELDNO)
+    {
+        int fldno = (Integer) right;
+        if (fldno < 0) {
+          return false;
+        }
+        type2 = schema.fieldType(fldno);
+    }
     // test left and right type compatibility
     return (type1 == type2);
 
