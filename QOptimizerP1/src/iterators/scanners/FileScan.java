@@ -25,6 +25,7 @@ public class FileScan extends Iterator {
 		this.setSchema(schema);
 		this.file = file;
 		this.tuple = new Tuple(schema);
+		this.scan = file.openScan();
 	}
 
 	/**
