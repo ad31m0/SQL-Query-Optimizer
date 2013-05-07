@@ -1,29 +1,40 @@
 package query;
 
+import global.Minibase;
 import parser.AST_Insert;
+import primitives.Tuple;
 
 /**
  * Execution plan for inserting tuples.
  */
 class Insert implements Plan {
 
-  /**
-   * Optimizes the plan, given the parsed query.
-   * 
-   * @throws QueryException if table doesn't exists or values are invalid
-   */
-  public Insert(AST_Insert tree) throws QueryException {
+	private String fileName;
+	private Tuple tuple;
 
-  } // public Insert(AST_Insert tree) throws QueryException
+	/**
+	 * Optimizes the plan, given the parsed query.
+	 * 
+	 * @throws QueryException
+	 *             if table doesn't exists or values are invalid
+	 */
+	public Insert(AST_Insert tree) throws QueryException {
+		fileName = tree.getFileName();
+		QueryCheck.tableExists(fileName);
 
-  /**
-   * Executes the plan and prints applicable output.
-   */
-  public void execute() {
+		tuple = new Tuple(Minibase.SystemCatalog.getSchema(fileName),
+				tree.getValues());
 
-    // print the output message
-    System.out.println("0 rows affected. (Not implemented)");
+	} // public Insert(AST_Insert tree) throws QueryException
 
-  } // public void execute()
+	/**
+	 * Executes the plan and prints applicable output.
+	 */
+	public void execute() {
+
+		// print the output message
+		System.out.println("0 rows affected. (Not implemented)");
+
+	} // public void execute()
 
 } // class Insert implements Plan

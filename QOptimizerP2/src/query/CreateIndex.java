@@ -1,5 +1,7 @@
 package query;
 
+import index.HashIndex;
+import global.Minibase;
 import parser.AST_CreateIndex;
 
 /**
@@ -7,6 +9,12 @@ import parser.AST_CreateIndex;
  */
 class CreateIndex implements Plan {
 
+	protected String fileName;
+	
+	protected String tableName;
+	
+	protected String colName;
+	
   /**
    * Optimizes the plan, given the parsed query.
    * 
@@ -14,15 +22,27 @@ class CreateIndex implements Plan {
    */
   public CreateIndex(AST_CreateIndex tree) throws QueryException {
 
+	  fileName = tree.getFileName();
+	  QueryCheck.fileNotExists(fileName);
+
+	  tableName = tree.getIxTable();
+	  QueryCheck.tableExists(tableName);
+	  
+	  colName = tree.getIxColumn();
+	  QueryCheck.columnExists( Minibase.SystemCatalog.getSchema(tableName), colName);
+	  
   } // public CreateIndex(AST_CreateIndex tree) throws QueryException
 
   /**
    * Executes the plan and prints applicable output.
    */
   public void execute() {
-
+	
+	  new HashIndex(fileName);
+	  
+	  Minibase.SystemCatalog.createIndex(fileName, tableName, colName);
     // print the output message
-    System.out.println("(Not implemented)");
+    System.out.println("Index Created.");
 
   } // public void execute()
 
