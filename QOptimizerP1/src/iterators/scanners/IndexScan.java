@@ -7,7 +7,6 @@ import global.SearchKey;
 import heap.HeapFile;
 import index.BucketScan;
 import index.HashIndex;
-import index.HashScan;
 import iterators.Iterator;
 
 /**
