@@ -48,8 +48,12 @@ SELECT sid, name, points FROM Students, Grades WHERE sid = gsid AND points >= 3.
 SELECT * FROM Foo WHERE a = 1 and b = 2 or c = 3 and d = 4 and e = 5;
 SELECT * FROM Students, Grades WHERE sid = gsid AND age = 30.0;
 
-STATS
 
+STATS
+DESCRIBE Students;
+DESCRIBE Courses;
+DESCRIBE Grades;
+DESCRIBE Foo;
 --------------------------------------------------------------------------------
 -- Invalid Queries
 
@@ -88,16 +92,6 @@ SELECT * FROM Foo, Grades WHERE a = 1 OR points = 0.0 OR bad = 5;
 --------------------------------------------------------------------------------
 -- Odds and Ends
 
-DESCRIBE Students;
 
-UPDATE Students SET sid = 5 WHERE name = 'Chris';
-
-DELETE Students WHERE name = 'Chris';
-
-DROP INDEX IX_Age;
-DROP TABLE Students;
-DROP TABLE Courses;
-DROP TABLE Grades;
-DROP TABLE Foo;
 
 QUIT
