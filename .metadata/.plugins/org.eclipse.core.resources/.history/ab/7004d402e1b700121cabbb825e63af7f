@@ -80,11 +80,6 @@ public class SimpleJoin extends Iterator {
 			}
 			right_tuple = right.getNext();
 			joined_tuple = Tuple.join(left_tuple, right_tuple, getSchema());
-			
-			if(preds==null || preds.length==0){
-				next_tuple = joined_tuple;
-				return true;
-			}
 			for (Predicate pred : preds)
 				if (pred.evaluate(joined_tuple)) {
 					next_tuple = joined_tuple;
