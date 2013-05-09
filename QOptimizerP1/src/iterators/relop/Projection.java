@@ -60,7 +60,12 @@ public class Projection extends Iterator {
 	 * Returns true if there are more tuples, false otherwise.
 	 */
 	public boolean hasNext() {
-		return iter.hasNext();
+		boolean result = iter.hasNext();
+		if(!result)
+		{
+			this.close();
+		}
+		return result;
 	}
 
 	/**

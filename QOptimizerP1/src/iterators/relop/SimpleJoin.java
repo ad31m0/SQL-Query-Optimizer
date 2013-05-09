@@ -24,7 +24,10 @@ public class SimpleJoin extends Iterator {
 		this.left = left;
 		this.right = right;
 		this.preds = preds;
-		this.left_tuple = left.getNext();
+		if(left.hasNext())
+		{
+			this.left_tuple = left.getNext();
+		}
 		Schema schema = Schema.join(left.getSchema(), right.getSchema());
 		this.setSchema(schema);
 	}
@@ -75,8 +78,16 @@ public class SimpleJoin extends Iterator {
 			if (!right.hasNext()) {
 				right.restart();
 				if (!left.hasNext())
+				{
+					this.close();
 					return false;
+				}
 				left_tuple = left.getNext();
+			}
+			if(!right.hasNext() || left_tuple == null)
+			{
+				this.close();
+				return false;
 			}
 			right_tuple = right.getNext();
 			joined_tuple = Tuple.join(left_tuple, right_tuple, getSchema());
@@ -91,6 +102,7 @@ public class SimpleJoin extends Iterator {
 					return true;
 				}
 		}
+		this.close();
 		return false;
 	}
 

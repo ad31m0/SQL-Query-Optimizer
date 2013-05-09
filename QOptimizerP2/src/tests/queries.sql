@@ -43,17 +43,14 @@ INSERT INTO Foo VALUES (1, 4, 3, 4, 6);
 -------------------------------------------------------------------------------
 -- Sample Queries
 
-SELECT sid, name, points FROM Students, Grades WHERE sid = gsid AND points >= 3.0;
-SELECT sid, name, points FROM Students, Grades WHERE sid = gsid AND points >= 3.0 OR sid = gsid AND points <= 2.5;
+SELECT * FROM Students;
+SELECT * FROM Courses ;
+SELECT * FROM Grades ;
+SELECT * FROM Foo ;
+SELECT sid, name, points,title FROM Students, Grades,Courses WHERE sid = gsid AND points >= 3.0 AND cid = gcid;
 SELECT * FROM Foo WHERE a = 1 and b = 2 or c = 3 and d = 4 and e = 5;
-SELECT * FROM Students, Grades WHERE sid = gsid AND age = 30.0;
-
-
 STATS
-DESCRIBE Students;
-DESCRIBE Courses;
-DESCRIBE Grades;
-DESCRIBE Foo;
+
 --------------------------------------------------------------------------------
 -- Invalid Queries
 
@@ -77,13 +74,6 @@ INSERT INTO Bad VALUES (1);
 INSERT INTO Courses VALUES (1, 'two', 3);
 INSERT INTO Courses VALUES ('one', 2);
 
-DELETE Bad;
-DELETE Grades WHERE bad = 5;
-DELETE Grades WHERE gsid = 'bad';
-
-UPDATE Bad SET Id = 1;
-UPDATE Courses SET bad = 1;
-UPDATE Courses SET cid = 'bad';
 
 SELECT * FROM Grades, Bad;
 SELECT sid, bad FROM Grades, Students;
@@ -92,6 +82,12 @@ SELECT * FROM Foo, Grades WHERE a = 1 OR points = 0.0 OR bad = 5;
 --------------------------------------------------------------------------------
 -- Odds and Ends
 
+DESCRIBE Students;
 
+DROP INDEX IX_Age;
+DROP TABLE Students;
+DROP TABLE Courses;
+DROP TABLE Grades;
+DROP TABLE Foo;
 
 QUIT

@@ -124,6 +124,10 @@ public class CNFSelection extends Iterator
 			}
 			is_consumed = false;
 		}
+		if(!has_next)
+		{
+			this.close();
+		}
 		return has_next;
 	}
 

@@ -303,7 +303,7 @@ class RelOperatorTest extends TestDriver {
 				tuple.setIntFld(4, i + 100);
 
 				// insert the tuple in the file and index
-				RID rid = drivers.insertRecord(tuple.getData());
+				 drivers.insertRecord(tuple.getData());
 
 			} // for
 			saveCounts("drivers");

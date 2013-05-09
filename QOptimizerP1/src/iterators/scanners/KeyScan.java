@@ -65,7 +65,12 @@ public class KeyScan extends Iterator {
 	 * Returns true if there are more tuples, false otherwise.
 	 */
 	public boolean hasNext() {
-		return this.scan.hasNext();
+		boolean result = this.scan.hasNext();
+		if(!result)
+		{
+			this.close();
+		}
+		return result;
 	}
 
 	/**

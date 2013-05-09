@@ -66,7 +66,12 @@ public class IndexScan extends Iterator {
 	 * Returns true if there are more tuples, false otherwise.
 	 */
 	public boolean hasNext() {
-		return scan.hasNext();
+		boolean result = scan.hasNext();
+		if(!result)
+		{
+			this.close();
+		}
+		return result;
 	}
 
 	/**

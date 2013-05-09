@@ -5,7 +5,6 @@ import global.SearchKey;
 import heap.HeapFile;
 import index.HashIndex;
 import iterators.Iterator;
-import iterators.scanners.FileScan;
 import iterators.scanners.KeyScan;
 import primitives.Schema;
 import primitives.Tuple;
@@ -89,6 +88,7 @@ public class HashJoin extends Iterator {
 				return true;
 			}
 		}
+		this.close();
 		return false;
 	}
 

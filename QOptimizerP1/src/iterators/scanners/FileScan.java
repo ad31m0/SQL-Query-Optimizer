@@ -3,7 +3,6 @@ package iterators.scanners;
 import iterators.Iterator;
 import primitives.Schema;
 import primitives.Tuple;
-import global.Convert;
 import global.RID;
 import heap.HeapFile;
 import heap.HeapScan;
@@ -42,7 +41,7 @@ public class FileScan extends Iterator {
 	 * Restarts the iterator, i.e. as if it were just constructed.
 	 */
 	public void restart() {
-		scan = file.openScan();
+		this.scan = file.openScan();
 	}
 
 	/**
@@ -63,7 +62,12 @@ public class FileScan extends Iterator {
 	 * Returns true if there are more tuples, false otherwise.
 	 */
 	public boolean hasNext() {
-		return scan.hasNext();
+		boolean result = scan.hasNext();
+		if(!result)
+		{
+			this.close();
+		}
+		return result;
 	}
 
 	/**
